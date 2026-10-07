@@ -1,0 +1,920 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BuyWise - What Should I Buy?</title> <style> *{box-sizing:border-box} body{ margin:0; font-family:Arial,Helvetica,sans-serif; background:#f5f5fa; color:#17171c } header{ max-width:1100px; margin:auto; padding:25px 20px; display:flex; justify-content:space-between; align-items:center } .logo{font-size:25px;font-weight:900} .logo span{color:#635bff} .header-text{color:#777;font-size:14px} .hero{text-align:center;padding:55px 20px 40px} .badge{ display:inline-block; background:#e9e7ff; color:#635bff; padding:9px 16px; border-radius:30px; font-size:13px; font-weight:bold; margin-bottom:20px } .hero h1{ font-size:clamp(45px,8vw,72px); line-height:.95; letter-spacing:-4px; margin:0 0 20px } .hero h1 span{color:#635bff} .hero p{ max-width:650px; margin:auto; color:#777; font-size:18px; line-height:1.6 } .container{ width:min(950px,calc(100% - 30px)); margin:20px auto 80px } .card{ background:white; border:1px solid #dedee8; border-radius:25px; padding:30px; box-shadow:0 20px 60px rgba(40,35,90,.08) } .step{margin-bottom:38px} .step-title{ display:flex; align-items:center; gap:10px; margin-bottom:15px } .number{ width:30px; height:30px; background:#635bff; color:white; border-radius:50%; display:flex; justify-content:center; align-items:center; font-weight:bold; flex-shrink:0 } .step-title h2{margin:0;font-size:18px} .choose-category{ width:100%; min-height:90px; border:3px dashed #635bff; background:#faf9ff; color:#17171c; border-radius:16px; padding:20px; text-align:left; cursor:pointer; font-size:17px; font-weight:bold } .choose-category:hover{background:#f0efff} .choose-category small{ display:block; color:#777; margin-top:8px; font-size:13px; font-weight:normal } #categoryMenu{ display:none; margin-top:15px; padding:20px; background:#fafaff; border:1px solid #dddde8; border-radius:18px } #categoryMenu.show{display:block} .menu-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px } .menu-header h3{margin:0;font-size:21px} .back-btn{ background:white; color:#635bff; border:1px solid #c8c5e8; border-radius:9px; padding:9px 14px; cursor:pointer; font-weight:bold } .category-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px } .category-btn{ width:100%; min-height:125px; background:white; color:#17171c; border:1px solid #dedee8; border-radius:15px; padding:15px 8px; cursor:pointer; text-align:center } .category-btn:hover{ border:2px solid #635bff; background:#f3f1ff } .category-btn .icon{ display:block; font-size:34px; margin-bottom:8px } .category-btn .name{ display:block; font-size:14px; font-weight:bold; color:#17171c } .category-btn .desc{ display:block; color:#777; font-size:11px; margin-top:5px } #selectedProduct{ display:none; background:#eeecff; border:2px solid #635bff; border-radius:15px; padding:16px; align-items:center; justify-content:space-between } .selected-left{ display:flex; align-items:center; gap:12px } .selected-icon{font-size:34px} .selected-name{font-size:17px;font-weight:bold} .selected-small{ color:#777; font-size:12px; margin-top:4px } .change-btn{ background:white; color:#635bff; border:1px solid #c7c3e8; padding:9px 13px; border-radius:9px; cursor:pointer; font-weight:bold } .budget-wrapper{position:relative} .dollar{ position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#777; font-weight:bold } #budget{ width:100%; padding:17px 17px 17px 35px; border:1px solid #dedee8; background:#fafafd; border-radius:13px; font-size:17px; color:#17171c } .use-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px } .use-btn{ width:100%; min-height:85px; background:white; color:#17171c; border:2px solid #dedee8; border-radius:14px; cursor:pointer; padding:12px } .use-btn:hover{border-color:#635bff} .use-btn.selected{ background:#ebe9ff; border-color:#635bff; color:#5047e8 } .use-icon{ display:block; font-size:26px; margin-bottom:7px } .use-name{font-size:13px;font-weight:bold} .find-btn{ width:100%; min-height:65px; display:block; background:#635bff; color:white; border:0; border-radius:15px; padding:18px; font-size:18px; font-weight:bold; cursor:pointer } .find-btn:hover{background:#5047e8} #results{ display:none; margin-top:40px; padding-top:35px; border-top:2px solid #eeeef5 } #results.show{display:block} .results-title{ margin:0 0 8px; font-size:29px } .results-subtitle{ color:#777; line-height:1.5; margin-bottom:20px } .result-card{ display:grid; grid-template-columns:80px 1fr 145px; gap:18px; align-items:center; background:white; border:1px solid #dedee8; border-radius:17px; padding:17px; margin-bottom:12px } .result-icon{ width:80px; height:80px; background:#f0efff; border-radius:15px; display:flex; justify-content:center; align-items:center; font-size:38px } .result-rank{ color:#635bff; font-size:11px; font-weight:bold } .result-name{ font-size:18px; font-weight:bold; margin:5px 0 } .result-type{ display:inline-block; background:#f0efff; color:#635bff; padding:5px 8px; border-radius:7px; font-size:11px; font-weight:bold; margin-bottom:7px } .result-description{ color:#777; font-size:13px; line-height:1.5 } .result-price-text{ margin-top:8px; font-size:13px; font-weight:bold } .price-box{ background:#f1efff; border:1px solid #dfdcff; border-radius:13px; padding:12px 8px; text-align:center } .price-label{ color:#777; font-size:10px; font-weight:bold } .price{ color:#635bff; font-size:25px; font-weight:900; margin-top:4px } .score{ color:#18a66a; font-size:11px; font-weight:bold; margin-top:5px } .why{ background:#f1efff; border-radius:15px; padding:18px; color:#555; line-height:1.6; margin-top:18px } .start-over{ width:100%; min-height:62px; display:block; background:#17171c; color:white; border:0; border-radius:14px; margin-top:18px; padding:16px; font-size:17px; font-weight:bold; cursor:pointer } .start-over:hover{background:#33333b} .info{ max-width:950px; margin:0 auto 70px; padding:0 20px } .info h2{font-size:30px} .info>p{color:#777;line-height:1.7} .info-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:15px } .info-card{ background:white; border:1px solid #dedee8; border-radius:17px; padding:20px } .info-card strong{ display:block; margin-bottom:8px } .info-card span{ color:#777; font-size:13px; line-height:1.5 } footer{ border-top:1px solid #dddde8; text-align:center; color:#777; padding:30px; font-size:13px } @media(max-width:700px){ header{padding:20px 15px} .header-text{display:none} .hero{padding-top:35px} .hero h1{letter-spacing:-2px} .card{padding:20px} .category-grid{grid-template-columns:repeat(2,1fr)} .use-grid{grid-template-columns:repeat(2,1fr)} .result-card{grid-template-columns:65px 1fr} .result-icon{width:65px;height:65px} .price-box{grid-column:2;text-align:left} .info-grid{grid-template-columns:1fr} } </style> </head> <body> <header> <div class="logo">Buy<span>Wise</span></div> <div class="header-text">Smarter buying decisions</div> </header> <section class="hero"> <div class="badge">✨ Your personal buying decision tool</div> <h1> What should<br> <span>I buy?</span> </h1> <p> Tell us what you're shopping for, your budget, and how you'll use it. We'll rank the options that make the most sense for you. </p> </section> <div class="container"> <div class="card"> <div class="step"> <div class="step-title"> <div class="number">1</div> <h2>What are you looking to buy?</h2> </div>
+<button type="button" class="choose-category" id="chooseButton" onclick="openMenu()">
+
+🔎 Choose a category or product
+<small>
+  Electronics, Gaming & Audio, Home, Lifestyle,
+  Fitness, Travel and more
+</small>
+</button> <div id="selectedProduct">
+<div class="selected-left">
+  <div class="selected-icon" id="selectedIcon">🛍️</div>
+  <div>
+    <div class="selected-name" id="selectedName">
+      Product
+    </div>
+    <div class="selected-small">
+      Selected product
+    </div>
+  </div>
+</div>
+<button
+  type="button"
+  class="change-btn"
+  onclick="openMenu()">
+  Change
+</button>
+</div> <div id="categoryMenu">
+<div class="menu-header">
+  <h3 id="menuTitle">Choose a category</h3>
+  <button
+    type="button"
+    class="back-btn"
+    id="backButton"
+    onclick="goBack()">
+    ← Back
+  </button>
+</div>
+<div
+  class="category-grid"
+  id="categoryGrid">
+</div>
+</div> </div> <div class="step"> <div class="step-title"> <div class="number">2</div> <h2>What's your budget?</h2> </div> <div class="budget-wrapper">
+<span class="dollar">$</span>
+<input
+  id="budget"
+  type="number"
+  min="1"
+  placeholder="1000">
+</div> </div> <div class="step"> <div class="step-title"> <div class="number">3</div> <h2>What will you use it for?</h2> </div> <div class="use-grid">
+<button type="button" class="use-btn"
+  onclick="chooseUse(this,'Work')">
+  <span class="use-icon">💼</span>
+  <span class="use-name">Work</span>
+</button>
+<button type="button" class="use-btn"
+  onclick="chooseUse(this,'Gaming')">
+  <span class="use-icon">🎮</span>
+  <span class="use-name">Gaming</span>
+</button>
+<button type="button" class="use-btn"
+  onclick="chooseUse(this,'School')">
+  <span class="use-icon">📚</span>
+  <span class="use-name">School</span>
+</button>
+<button type="button" class="use-btn"
+  onclick="chooseUse(this,'Creative')">
+  <span class="use-icon">🎨</span>
+  <span class="use-name">Creative</span>
+</button>
+<button type="button" class="use-btn"
+  onclick="chooseUse(this,'Travel')">
+  <span class="use-icon">✈️</span>
+  <span class="use-name">Travel</span>
+</button>
+<button type="button" class="use-btn"
+  onclick="chooseUse(this,'Home')">
+  <span class="use-icon">🏠</span>
+  <span class="use-name">Home</span>
+</button>
+<button type="button" class="use-btn"
+  onclick="chooseUse(this,'Fitness')">
+  <span class="use-icon">🏃</span>
+  <span class="use-name">Fitness</span>
+</button>
+<button type="button" class="use-btn"
+  onclick="chooseUse(this,'Everyday')">
+  <span class="use-icon">✨</span>
+  <span class="use-name">Everyday</span>
+</button>
+</div> </div>
+<button type="button" class="find-btn" onclick="findOptions()">
+
+🔎 FIND MY BEST OPTIONS →
+
+</button> <div id="results"> <h2 class="results-title"> Your best matches 🏆 </h2> <p class="results-subtitle" id="resultSubtitle"></p> <div id="resultList"></div> <div class="why" id="whyBox"></div>
+<button type="button" class="start-over" onclick="startOver()">
+
+← START OVER
+</button> </div> </div> </div> <section class="info"> <h2>How does BuyWise work?</h2> <p> Shopping for something new can be difficult. There are thousands of products, different prices and different features. BuyWise simplifies the decision by looking at what you want, your budget and how you plan to use it. </p> <div class="info-grid">
+<div class="info-card">
+  <strong>💰 Your budget</strong>
+  <span>
+    We prioritize choices that fit the amount
+    you want to spend.
+  </span>
+</div>
+<div class="info-card">
+  <strong>🎯 Your needs</strong>
+  <span>
+    Work, gaming, school, travel and everyday
+    use all have different priorities.
+  </span>
+</div>
+<div class="info-card">
+  <strong>🏆 Ranked recommendations</strong>
+  <span>
+    Instead of comparing dozens of choices,
+    we put the strongest matches first.
+  </span>
+</div>
+</div> </section> <footer> © 2026 BuyWise — Helping you make better buying decisions. </footer> <script>
+/* =========================================
+CATEGORY DATABASE
+========================================= */
+
+var categories = {
+
+main: [
+["electronics","💻","Electronics","Phones, computers and tech"],
+["gaming","🎮","Gaming & Audio","Gaming and sound"],
+["home","🏠","Home","Kitchen, cleaning and rooms"],
+["lifestyle","✨","Lifestyle","Everyday products"],
+["fitness","🏃","Sports & Fitness","Workout and sports"],
+["travel","✈️","Travel","Travel equipment"],
+["beauty","🧴","Beauty & Care","Personal care"],
+["office","📚","Office & School","Work and school"],
+["mobility","🚲","Mobility","Bikes and transport"]
+],
+
+electronics: [
+["laptop","💻","Laptops","Work and school computers"],
+["phone","📱","Phones","Smartphones"],
+["tablet","📲","Tablets","Portable screens"],
+["monitor","🖥️","Monitors","Computer displays"],
+["tv","📺","TVs","Home entertainment"],
+["camera","📷","Cameras","Photography and video"],
+["smartwatch","⌚","Smartwatches","Wearable technology"],
+["ereader","📖","E-readers","Digital reading"],
+["projector","📽️","Projectors","Big screen viewing"],
+["printer","🖨️","Printers","Home and office printing"],
+["router","📡","Wi-Fi Routers","Home internet"],
+["keyboard","⌨️","Keyboards","Computer keyboards"],
+["mouse","🖱️","Mice","Computer mice"],
+["powerbank","🔋","Power Banks","Portable charging"],
+["charger","🔌","Chargers","Device charging"]
+],
+
+gaming: [
+["console","🎮","Gaming Consoles","Console gaming"],
+["headphones","🎧","Headphones","Music and gaming"],
+["earbuds","🎵","Wireless Earbuds","Portable audio"],
+["speaker","🔊","Speakers","Home and portable sound"],
+["gamingkeyboard","⌨️","Gaming Keyboards","Gaming keyboards"],
+["gamingmouse","🖱️","Gaming Mice","Gaming mice"],
+["controller","🕹️","Controllers","Game controllers"],
+["microphone","🎙️","Microphones","Streaming and recording"],
+["webcam","📹","Webcams","Streaming and calls"],
+["vr","🥽","VR Headsets","Virtual reality"],
+["gamingchair","🪑","Gaming Chairs","Gaming seating"],
+["handheld","🎮","Gaming Handhelds","Portable gaming"]
+],
+
+home: [
+["kitchen","🍳","Kitchen","Cooking and kitchen"],
+["cleaning","🧹","Cleaning","Cleaning products"],
+["bedroom","🛏️","Bedroom","Sleep and bedroom"],
+["livingroom","🛋️","Living Room","Furniture and entertainment"],
+["homeoffice","🖥️","Home Office","Desks and work"],
+["garden","🌱","Garden","Outdoor products"],
+["smarthome","🏠","Smart Home","Connected home"],
+["bathroom","🛁","Bathroom","Bathroom products"],
+["laundry","🧺","Laundry","Washing and drying"],
+["storage","📦","Storage","Home organization"]
+],
+
+kitchen: [
+["coffeemaker","☕","Coffee Makers","Coffee and espresso"],
+["airfryer","🍟","Air Fryers","Fast cooking"],
+["blender","🥤","Blenders","Smoothies and food"],
+["mixer","🥣","Mixers","Baking and mixing"],
+["microwave","📡","Microwaves","Quick cooking"],
+["toaster","🍞","Toasters","Breakfast"],
+["kettle","🫖","Electric Kettles","Hot drinks"],
+["ricecooker","🍚","Rice Cookers","Easy rice cooking"],
+["slowcooker","🍲","Slow Cookers","Slow cooking"],
+["knives","🔪","Kitchen Knives","Cooking and preparation"],
+["cuttingboard","🪵","Cutting Boards","Food preparation"],
+["cookware","🍳","Cookware","Pots and pans"],
+["bakeware","🧁","Bakeware","Baking equipment"],
+["juicer","🧃","Juicers","Fresh juice"],
+["foodprocessor","🥕","Food Processors","Food preparation"],
+["wafflemaker","🧇","Waffle Makers","Breakfast and desserts"],
+["pressurecooker","🍲","Pressure Cookers","Fast cooking"],
+["kitchentools","🥄","Kitchen Tools","Everyday cooking"]
+],
+
+cleaning: [
+["vacuum","🧹","Vacuum Cleaners","Everyday vacuuming"],
+["robotvacuum","🤖","Robot Vacuums","Automatic cleaning"],
+["mop","🧽","Mops","Floor cleaning"],
+["steamcleaner","💨","Steam Cleaners","Steam cleaning"],
+["carpetcleaner","🧼","Carpet Cleaners","Deep cleaning"],
+["airpurifier","🌬️","Air Purifiers","Indoor air"],
+["dehumidifier","💧","Dehumidifiers","Reduce moisture"],
+["handvacuum","🧹","Hand Vacuums","Small cleaning jobs"]
+],
+
+bedroom: [
+["mattress","🛏️","Mattresses","Sleeping comfort"],
+["pillow","😴","Pillows","Sleeping pillows"],
+["bedlamp","💡","Bedroom Lamps","Bedroom lighting"],
+["fan","🌀","Fans","Cooling"],
+["blanket","🧣","Blankets","Warm bedding"],
+["alarmclock","⏰","Alarm Clocks","Wake-up clocks"],
+["nightstand","🗄️","Nightstands","Bedroom furniture"],
+["humidifier","💧","Humidifiers","Indoor humidity"]
+],
+
+livingroom: [
+["sofa","🛋️","Sofas","Living room seating"],
+["livingtv","📺","TVs","Home entertainment"],
+["homespeaker","🔊","Home Speakers","Home audio"],
+["coffeetable","🪵","Coffee Tables","Living room furniture"],
+["floorlamp","💡","Floor Lamps","Room lighting"],
+["bookshelf","📚","Bookshelves","Storage"],
+["rug","🟫","Rugs","Home decoration"],
+["recliner","💺","Recliners","Comfortable seating"]
+],
+
+homeoffice: [
+["officechair","🪑","Office Chairs","Ergonomic seating"],
+["desk","🖥️","Desks","Work and study desks"],
+["desklamp","💡","Desk Lamps","Workspace lighting"],
+["deskstorage","🗄️","Desk Storage","Organization"],
+["whiteboard","📋","Whiteboards","Planning and studying"],
+["monitorarm","🖥️","Monitor Arms","Monitor mounting"]
+],
+
+garden: [
+["lawnmower","🌱","Lawn Mowers","Cut grass"],
+["gardentools","🪴","Garden Tools","Gardening equipment"],
+["pressurewasher","💦","Pressure Washers","Outdoor cleaning"],
+["grill","🍖","Grills","Outdoor cooking"],
+["leafblower","🍂","Leaf Blowers","Clear leaves"],
+["hedgetrimmer","🌿","Hedge Trimmers","Trim hedges"],
+["gardenfurniture","🪑","Garden Furniture","Outdoor furniture"]
+],
+
+smarthome: [
+["smartlights","💡","Smart Lights","Smart lighting"],
+["smartplugs","🔌","Smart Plugs","Control appliances"],
+["smartdisplay","🖥️","Smart Displays","Smart home displays"],
+["securitycamera","📹","Security Cameras","Home monitoring"],
+["smartthermostat","🌡️","Smart Thermostats","Temperature control"],
+["smartlock","🔐","Smart Locks","Smart doors"],
+["doorbell","🔔","Video Doorbells","See visitors"],
+["smartspeaker","🔊","Smart Speakers","Voice assistants"]
+],
+
+bathroom: [
+["toothbrush","🪥","Electric Toothbrushes","Oral care"],
+["hairdryer","💨","Hair Dryers","Hair drying"],
+["shaver","🪒","Electric Shavers","Shaving"],
+["scale","⚖️","Bathroom Scales","Weight tracking"],
+["mirror","🪞","Bathroom Mirrors","Bathroom mirrors"],
+["waterflosser","💦","Water Flossers","Oral care"]
+],
+
+laundry: [
+["washingmachine","🧺","Washing Machines","Laundry washing"],
+["dryer","🔥","Dryers","Laundry drying"],
+["iron","👔","Irons","Clothes ironing"],
+["steamer","💨","Clothes Steamers","Remove wrinkles"],
+["laundrybasket","🧺","Laundry Baskets","Laundry storage"],
+["dryingrack","👕","Drying Racks","Air drying"]
+],
+
+storage: [
+["storagebox","📦","Storage Boxes","Organize your home"],
+["closetorganizer","👕","Closet Organizers","Clothing organization"],
+["shelving","🗄️","Shelving","Storage shelves"],
+["shoestorage","👟","Shoe Storage","Organize shoes"],
+["underbedstorage","🛏️","Under-Bed Storage","Save space"]
+],
+
+lifestyle: [
+["shoes","👟","Shoes","Everyday footwear"],
+["backpack","🎒","Backpacks","School and work"],
+["clothing","👕","Clothing","Everyday clothing"],
+["watch","⌚","Watches","Watches and accessories"],
+["instrument","🎸","Musical Instruments","Music equipment"],
+["gift","🎁","Gifts","Gift ideas"],
+["wallet","👛","Wallets","Wallets and card holders"],
+["sunglasses","🕶️","Sunglasses","Everyday sunglasses"],
+["jewelry","💎","Jewelry","Accessories"],
+["waterbottle","🥤","Water Bottles","Reusable bottles"],
+["umbrella","☂️","Umbrellas","Rain protection"]
+],
+
+fitness: [
+["gym","🏋️","Home Gym Equipment","Workout equipment"],
+["running","🏃","Running Gear","Running equipment"],
+["cycling","🚴","Cycling","Cycling equipment"],
+["yoga","🧘","Yoga","Yoga equipment"],
+["fitnesstracker","⌚","Fitness Trackers","Activity tracking"],
+["sportsbag","🎒","Sports Bags","Gym bags"],
+["dumbbells","🏋️","Dumbbells","Strength training"],
+["treadmill","🏃","Treadmills","Indoor running"],
+["exercisebike","🚴","Exercise Bikes","Indoor cycling"],
+["resistancebands","🪢","Resistance Bands","Strength training"]
+],
+
+travel: [
+["luggage","🧳","Luggage","Suitcases"],
+["travelbackpack","🎒","Travel Backpacks","Travel bags"],
+["packingcubes","🧳","Packing Cubes","Luggage organization"],
+["traveladapter","🔌","Travel Adapters","Charging abroad"],
+["travelpillow","😴","Travel Pillows","Travel comfort"],
+["camerabag","📷","Camera Bags","Camera protection"],
+["toiletrybag","🧴","Toiletry Bags","Travel organization"],
+["passportholder","🛂","Passport Holders","Travel documents"],
+["travelcharger","🔋","Travel Chargers","Charge devices"]
+],
+
+beauty: [
+["beautyhairdryer","💨","Hair Dryers","Hair drying"],
+["beautyshaver","🪒","Electric Shavers","Shaving"],
+["skincare","🧴","Skincare","Skin care"],
+["hairtools","💇","Hair Styling Tools","Hair styling"],
+["beautytoothbrush","🪥","Electric Toothbrushes","Oral care"],
+["trimmer","✂️","Trimmers","Grooming"],
+["curler","💇","Hair Curlers","Hair curling"],
+["massager","💆","Massagers","Relaxation"]
+],
+
+office: [
+["officechair2","🪑","Office Chairs","Office seating"],
+["desk2","🖥️","Desks","Study and work"],
+["stationery","✏️","Stationery","Pens and notebooks"],
+["printer2","🖨️","Printers","Printing"],
+["calculator","🧮","Calculators","School calculators"],
+["notebook","📓","Notebooks","School and work"],
+["schoolbackpack","🎒","School Backpacks","Student bags"],
+["deskorganizer","🗃️","Desk Organizers","Desk organization"]
+],
+
+mobility: [
+["bike","🚲","Bikes","City, mountain and road bikes"],
+["escooter","🛴","Electric Scooters","Personal transportation"],
+["bikeaccessories","🚴","Bike Accessories","Cycling accessories"],
+["bikehelmet","⛑️","Bike Helmets","Cycling safety"],
+["bikelight","🔦","Bike Lights","Cycling visibility"],
+["bikepump","💨","Bike Pumps","Tire inflation"],
+["bikebag","🎒","Bike Bags","Cycling storage"]
+]
+
+};
+
+/* =========================================
+SPECIFIC RECOMMENDATIONS
+========================================= */
+
+var recommendations = {
+
+bike: [
+["🚲","Hybrid Bike","Giant Escape 3","A versatile bike for commuting, city riding and casual weekend rides.",599],
+["🚵","Mountain Bike","Trek Marlin 6","A capable hardtail mountain bike for trails, parks and rougher terrain.",799],
+["🚴","Road Bike","Triban RC 120","A lightweight road bike designed for faster rides and longer distances.",699]
+],
+
+laptop: [
+["💻","Everyday Laptop","Lenovo IdeaPad Slim","A practical laptop for school, browsing, documents and everyday work.",599],
+["💻","Premium Laptop","MacBook Air","A thin, quiet laptop with strong battery life for work and school.",999],
+["🎮","Gaming Laptop","ASUS TUF Gaming","A performance-focused laptop for gaming, school and demanding software.",899]
+],
+
+phone: [
+["📱","Budget Smartphone","Samsung Galaxy A Series","A balanced smartphone for everyday apps, photos and communication.",299],
+["📱","Premium Smartphone","iPhone","A powerful phone with a strong camera, long software support and premium design.",799],
+["📱","Android Flagship","Google Pixel","A premium Android phone with excellent photography and a clean interface.",699]
+],
+
+headphones: [
+["🎧","Noise-Cancelling Headphones","Sony WH Series","Over-ear headphones designed for travel, music and focused listening.",349],
+["🎧","Everyday Headphones","Anker Soundcore","A lower-cost option with strong battery life and useful everyday features.",99],
+["🎮","Gaming Headset","SteelSeries Arctis","A gaming-focused headset with a microphone and immersive sound.",149]
+],
+
+knives: [
+["🔪","Chef's Knife","Victorinox Fibrox","A dependable everyday chef's knife that is comfortable and practical.",45],
+["🔪","Santoku Knife","Mercer Culinary Santoku","A versatile Japanese-style knife for vegetables, meat and everyday cooking.",55],
+["🔪","Premium Chef's Knife","Wüsthof Classic","A premium chef's knife aimed at cooks who want excellent materials and balance.",180]
+],
+
+airfryer: [
+["🍟","Compact Air Fryer","Cosori Compact","A compact choice for fries, snacks and smaller households.",79],
+["🍟","Family Air Fryer","Ninja Air Fryer","A larger air fryer with enough capacity for family-sized meals.",149],
+["🍟","Dual-Basket Air Fryer","Ninja DualZone","Two cooking zones let you prepare different foods at the same time.",199]
+],
+
+blender: [
+["🥤","Personal Blender","Ninja Personal Blender","Compact blender for smoothies, shakes and quick drinks.",69],
+["🥤","Everyday Blender","Ninja Professional","A stronger blender for smoothies, sauces and everyday food preparation.",119],
+["🥤","Premium Blender","Vitamix","A high-performance blender for frequent cooking and demanding recipes.",399]
+],
+
+coffeemaker: [
+["☕","Drip Coffee Maker","Braun BrewSense","A straightforward coffee maker for everyday brewed coffee.",89],
+["☕","Pod Coffee Machine","Nespresso","A convenient choice for quick individual cups of coffee.",149],
+["☕","Espresso Machine","Breville Barista Express","A more advanced machine for people who want café-style espresso at home.",699]
+],
+
+vacuum: [
+["🧹","Cordless Vacuum","Dyson V Series","A convenient cordless vacuum for everyday floor and surface cleaning.",399],
+["🧹","Budget Vacuum","Shark Navigator","A practical upright vacuum with strong cleaning performance for the price.",199],
+["🤖","Robot Vacuum","Roborock","An automated option for people who want regular floor cleaning with less effort.",299]
+],
+
+tv: [
+["📺","Budget 4K TV","TCL QLED","A value-focused 4K TV for streaming, movies and everyday viewing.",499],
+["📺","Premium LED TV","Samsung QLED","A bright premium TV with strong picture quality for general entertainment.",899],
+["📺","OLED TV","LG OLED","A premium OLED display with excellent contrast and cinematic picture quality.",1299]
+],
+
+monitor: [
+["🖥️","Everyday Monitor","Dell 24-inch","A simple Full HD monitor for school, office work and everyday computing.",149],
+["🖥️","Gaming Monitor","AOC Gaming 27-inch","A fast gaming monitor designed for smoother gameplay.",249],
+["🎨","Creative Monitor","Dell UltraSharp","A larger high-quality display aimed at creative work and productivity.",499]
+],
+
+camera: [
+["📷","Mirrorless Camera","Sony Alpha","A versatile mirrorless camera for photography and video.",799],
+["📷","Beginner Camera","Canon EOS","An approachable camera for people starting photography.",649],
+["🎥","Vlogging Camera","Sony ZV Series","A compact camera designed around video and content creation.",699]
+],
+
+smartwatch: [
+["⌚","Everyday Smartwatch","Apple Watch","A smartwatch focused on notifications, apps, fitness and everyday use.",399],
+["⌚","Fitness Watch","Garmin Forerunner","A fitness-focused watch with detailed activity and training features.",299],
+["⌚","Android Smartwatch","Samsung Galaxy Watch","A versatile smartwatch for Android users with health and smart features.",299]
+],
+
+console: [
+["🎮","Home Console","PlayStation 5","A powerful current-generation console for a large game library.",499],
+["🎮","Xbox Console","Xbox Series X","A powerful console aimed at high-performance gaming.",499],
+["🎮","Portable Console","Nintendo Switch","A flexible console that works both handheld and connected to a TV.",299]
+],
+
+earbuds: [
+["🎵","Everyday Earbuds","Anker Soundcore Liberty","Affordable wireless earbuds with strong everyday battery life.",79],
+["🎵","Premium Earbuds","Apple AirPods Pro","Premium earbuds with active noise cancellation and strong integration with Apple devices.",249],
+["🎵","Android Earbuds","Samsung Galaxy Buds","Wireless earbuds designed especially well for Samsung and Android users.",149]
+],
+
+speaker: [
+["🔊","Portable Speaker","JBL Flip","A compact portable speaker for rooms, trips and outdoor listening.",129],
+["🔊","Party Speaker","JBL PartyBox","A larger speaker designed for parties and louder listening.",399],
+["🔊","Home Speaker","Sonos","A home-focused speaker with strong multi-room audio features.",199]
+],
+
+gamingkeyboard: [
+["⌨️","Budget Gaming Keyboard","Redragon Mechanical","An affordable mechanical keyboard for gaming and everyday use.",59],
+["⌨️","Mechanical Gaming Keyboard","Keychron","A customizable mechanical keyboard suitable for gaming and work.",119],
+["⌨️","Premium Gaming Keyboard","Razer","A feature-rich gaming keyboard aimed at competitive players.",179]
+],
+
+controller: [
+["🕹️","Xbox Controller","Xbox Wireless Controller","A versatile wireless controller for Xbox and PC gaming.",59],
+["🕹️","PlayStation Controller","DualSense","A feature-rich controller with adaptive triggers and haptic feedback.",69],
+["🕹️","PC Controller","8BitDo","A flexible controller with broad PC compatibility.",49]
+],
+
+microphone: [
+["🎙️","USB Microphone","Blue Yeti","A popular USB microphone for streaming, calls and recording.",99],
+["🎙️","Streaming Microphone","Elgato Wave","A microphone designed specifically for streaming and content creation.",149],
+["🎙️","XLR Microphone","Audio-Technica","A more advanced microphone for people building a serious audio setup.",199]
+],
+
+officechair: [
+["🪑","Budget Office Chair","IKEA Office Chair","A straightforward chair for everyday school and office work.",129],
+["🪑","Ergonomic Chair","SIHOO Ergonomic Chair","Designed to provide better support during longer work sessions.",249],
+["🪑","Premium Office Chair","Herman Miller","A premium ergonomic chair designed for long-term office use.",999]
+],
+
+mattress: [
+["🛏️","Memory Foam Mattress","Emma","A comfortable foam mattress aimed at everyday sleepers.",699],
+["🛏️","Hybrid Mattress","Simba","A hybrid design combining springs and foam for balanced support.",899],
+["🛏️","Premium Mattress","Tempur","A premium pressure-relieving mattress using specialized foam.",1299]
+],
+
+bikehelmet: [
+["⛑️","City Helmet","Giro","A comfortable helmet for commuting and everyday cycling.",59],
+["⛑️","Road Helmet","Kask","A lightweight option designed for road cycling.",149],
+["⛑️","Mountain Bike Helmet","Bell","A protective helmet designed for trail and mountain riding.",99]
+],
+
+escooter: [
+["🛴","Budget E-Scooter","Xiaomi Electric Scooter","A practical electric scooter for short urban trips.",399],
+["🛴","Commuter E-Scooter","Segway Ninebot","A reliable choice for regular city commuting.",599],
+["🛴","Long-Range E-Scooter","Segway Max","A larger scooter focused on longer range and stronger performance.",899]
+],
+
+backpack: [
+["🎒","School Backpack","Herschel","A simple everyday backpack for school and casual use.",79],
+["🎒","Work Backpack","Samsonite","A practical backpack with compartments for laptops and work gear.",99],
+["🎒","Travel Backpack","Osprey","A comfortable larger backpack designed for travel and longer trips.",179]
+],
+
+running: [
+["👟","Everyday Running Shoes","ASICS Gel","Comfortable running shoes for regular training and everyday use.",120],
+["👟","Speed Running Shoes","Nike Pegasus","Versatile shoes for training, faster runs and everyday running.",140],
+["👟","Premium Running Shoes","HOKA Clifton","Highly cushioned running shoes designed for comfortable longer runs.",160]
+],
+
+fitnesstracker: [
+["⌚","Basic Fitness Tracker","Xiaomi Smart Band","An affordable tracker for steps, activity and basic health metrics.",49],
+["⌚","Advanced Fitness Watch","Garmin Forerunner","Detailed activity and training tracking for serious fitness users.",299],
+["⌚","Smart Fitness Watch","Apple Watch","Combines fitness tracking with apps, notifications and smartwatch features.",399]
+],
+
+luggage: [
+["🧳","Carry-On Suitcase","Samsonite","A durable carry-on designed for short trips and flights.",149],
+["🧳","Large Suitcase","American Tourister","A larger suitcase for longer holidays and more luggage.",179],
+["🧳","Premium Luggage","Rimowa","Premium lightweight luggage built for frequent travelers.",999]
+],
+
+toothbrush: [
+["🪥","Electric Toothbrush","Oral-B Pro","An affordable electric toothbrush for everyday cleaning.",59],
+["🪥","Smart Toothbrush","Oral-B iO","A more advanced electric toothbrush with smart brushing feedback.",199],
+["🪥","Sonic Toothbrush","Philips Sonicare","A popular sonic toothbrush focused on gentle everyday cleaning.",129]
+],
+
+smartlights: [
+["💡","Smart Bulbs","Philips Hue","Smart bulbs with extensive color and automation options.",49],
+["💡","Budget Smart Bulbs","TP-Link Tapo","Affordable smart bulbs with app and smart-home control.",19],
+["💡","Smart Light Strip","Govee","Colorful smart lighting for desks, bedrooms and entertainment spaces.",39]
+],
+
+printer: [
+["🖨️","Home Inkjet Printer","HP Envy","A compact printer for everyday documents and occasional photos.",129],
+["🖨️","EcoTank Printer","Epson EcoTank","A refillable ink system designed to reduce long-term printing costs.",249],
+["🖨️","Laser Printer","Brother Laser","A fast printer for frequent document printing.",199]
+]
+
+};
+
+/* =========================================
+DEFAULT RECOMMENDATIONS
+========================================= */
+
+function createDefaultRecommendations(name,icon,budget){
+
+return [
+
+[
+  icon,
+  "Best Overall",
+  name,
+  "A balanced choice with a good mix of quality, useful features and value.",
+  Math.round(budget * .75)
+],
+[
+  icon,
+  "Best Value",
+  name,
+  "A more affordable option focused on getting the most useful features for your money.",
+  Math.round(budget * .45)
+],
+[
+  icon,
+  "Premium Choice",
+  name,
+  "A higher-end option for shoppers who want more features and stronger performance.",
+  Math.round(budget * .95)
+]
+];
+
+}
+
+/* =========================================
+VARIABLES
+========================================= */
+
+var currentCategory="main";
+var previousCategory="main";
+var selectedProduct=null;
+var selectedUse="";
+
+/* =========================================
+OPEN MENU
+========================================= */
+
+function openMenu(){
+
+document.getElementById("categoryMenu")
+.classList.add("show");
+
+showCategory("main");
+
+}
+
+/* =========================================
+SHOW CATEGORY
+========================================= */
+
+function showCategory(category){
+
+currentCategory=category;
+
+var grid=document.getElementById("categoryGrid");
+
+grid.innerHTML="";
+
+if(category=="main"){
+
+document.getElementById("menuTitle").innerHTML=
+  "Choose a category";
+document.getElementById("backButton").style.display=
+  "none";
+}else{
+
+document.getElementById("menuTitle").innerHTML=
+  "Choose a product";
+document.getElementById("backButton").style.display=
+  "block";
+}
+
+var items=categories[category];
+
+for(var i=0;i<items.length;i++){
+
+var item=items[i];
+var button=document.createElement("button");
+button.type="button";
+button.className="category-btn";
+button.innerHTML=
+  '<span class="icon">'+item[1]+'</span>'+
+  '<span class="name">'+item[2]+'</span>'+
+  '<span class="desc">'+item[3]+'</span>';
+button.onclick=(function(id,icon,name){
+  return function(){
+    if(categories[id]){
+      previousCategory=currentCategory;
+      showCategory(id);
+    }else{
+      selectProduct(id,icon,name);
+    }
+  };
+})(item[0],item[1],item[2]);
+grid.appendChild(button);
+}
+
+}
+
+/* =========================================
+BACK
+========================================= */
+
+function goBack(){
+
+showCategory(previousCategory);
+
+}
+
+/* =========================================
+SELECT PRODUCT
+========================================= */
+
+function selectProduct(id,icon,name){
+
+selectedProduct={
+id:id,
+icon:icon,
+name:name
+};
+
+document.getElementById("categoryMenu")
+.classList.remove("show");
+
+document.getElementById("chooseButton")
+.style.display="none";
+
+document.getElementById("selectedProduct")
+.style.display="flex";
+
+document.getElementById("selectedIcon")
+.innerHTML=icon;
+
+document.getElementById("selectedName")
+.innerHTML=name;
+
+}
+
+/* =========================================
+USE
+========================================= */
+
+function chooseUse(button,use){
+
+var buttons=
+document.getElementsByClassName("use-btn");
+
+for(var i=0;i<buttons.length;i++){
+
+buttons[i].classList.remove("selected");
+}
+
+button.classList.add("selected");
+
+selectedUse=use;
+
+}
+
+/* =========================================
+FIND
+========================================= */
+
+function findOptions(){
+
+if(selectedProduct==null){
+
+alert("Please choose a product first.");
+openMenu();
+return;
+}
+
+var budget=
+Number(document.getElementById("budget").value);
+
+if(!budget || budget<=0){
+
+alert("Please enter your budget.");
+document.getElementById("budget").focus();
+return;
+}
+
+if(selectedUse==""){
+
+alert("Please choose what you will use it for.");
+return;
+}
+
+var products;
+
+if(recommendations[selectedProduct.id]){
+
+products=recommendations[selectedProduct.id].slice();
+}else{
+
+products=createDefaultRecommendations(
+  selectedProduct.name,
+  selectedProduct.icon,
+  budget
+);
+}
+
+/*
+Make sure recommendations don't
+exceed the user's budget when possible.
+*/
+
+for(var i=0;i<products.length;i++){
+
+if(products[i][4]>budget){
+  products[i][4]=Math.max(
+    20,
+    Math.round(budget*.95)
+  );
+}
+}
+
+displayResults(products,budget);
+
+}
+
+/* =========================================
+RESULTS
+========================================= */
+
+function displayResults(products,budget){
+
+var list=
+document.getElementById("resultList");
+
+list.innerHTML="";
+
+document.getElementById("resultSubtitle").innerHTML=
+"For <strong>"+
+selectedProduct.name+
+"</strong> with a budget of <strong>$"+
+budget+
+"</strong>, mainly for <strong>"+
+selectedUse+
+"</strong>.";
+
+for(var i=0;i<products.length;i++){
+
+var p=products[i];
+var score=96-i*4;
+var card=document.createElement("div");
+card.className="result-card";
+card.innerHTML=
+  '<div class="result-icon">'+
+  p[0]+
+  '</div>'+
+  '<div>'+
+  '<div class="result-rank">'+
+  (i==0
+    ?"🏆 BEST MATCH"
+    :"#"+(i+1)+" MATCH")+
+  '</div>'+
+  '<div class="result-name">'+
+  p[2]+
+  '</div>'+
+  '<div class="result-type">'+
+  p[1]+
+  '</div>'+
+  '<div class="result-description">'+
+  p[3]+
+  '</div>'+
+  '<div class="result-price-text">'+
+  'Estimated price: $'+
+  p[4]+
+  '</div>'+
+  '</div>'+
+  '<div class="price-box">'+
+  '<div class="price-label">PRICE</div>'+
+  '<div class="price">$'+
+  p[4]+
+  '</div>'+
+  '<div class="score">'+
+  score+
+  '/100'+
+  '</div>'+
+  '</div>';
+list.appendChild(card);
+}
+
+document.getElementById("whyBox").innerHTML=
+
+"<strong>Why these recommendations?</strong><br><br>"+
+"You chose <strong>"+
+selectedProduct.name+
+"</strong>, a budget of <strong>$"+
+budget+
+"</strong>, and <strong>"+
+selectedUse+
+"</strong> as the main use. "+
+"BuyWise uses those choices to rank different product types "+
+"and show you options that make sense for your budget.";
+document.getElementById("results")
+.classList.add("show");
+
+setTimeout(function(){
+
+document.getElementById("results")
+  .scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+},100);
+
+}
+
+/* =========================================
+START OVER
+========================================= */
+
+function startOver(){
+
+selectedProduct=null;
+
+selectedUse="";
+
+currentCategory="main";
+
+previousCategory="main";
+
+document.getElementById("categoryMenu")
+.classList.remove("show");
+
+document.getElementById("selectedProduct")
+.style.display="none";
+
+document.getElementById("chooseButton")
+.style.display="block";
+
+document.getElementById("budget")
+.value="";
+
+var buttons=
+document.getElementsByClassName("use-btn");
+
+for(var i=0;i<buttons.length;i++){
+
+buttons[i].classList.remove("selected");
+}
+
+document.getElementById("results")
+.classList.remove("show");
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+</script> </body> </html>
+
